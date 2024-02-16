@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe Game @Swagatam Adhikary</title>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/566/566294.png" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Utility css */
+
+        .br-t {
+            border-top: 3px solid black;
+        }
+
+        .br-b {
+            border-bottom: 3px solid black;
+        }
+
+        .br-l {
+            border-left: 3px solid black;
+        }
+
+        .br-r {
+            border-right: 3px solid black;
+        }
+
+
+        nav {
+            width: 100%;
+            height: 3vh;
+            background-color: rgb(47 4 28);
+            color: white;
+            padding: 0.8em 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+        }
+
+        .container {
+            display: flex;
+            width: 100vw;
+            min-height: 92vh;
+        }
+
+        .gameScreen {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            background: linear-gradient(#ff3131, #11119e);
+        }
+
+        .gamegrid {
+            display: grid;
+            grid-template-columns: repeat(3, 10vw);
+            grid-template-rows: repeat(3, 10vw);
+        }
+
+        .grid-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 7rem;
+            cursor: pointer;
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        .grid-box:hover {
+            background-color: #b02f4dad;
+        }
+
+        .resultScreen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50%;
+            background: linear-gradient(180deg, #ffbc00, #9d0c0c);
+        }
+
+        .resultScreen h2 {
+            text-decoration: underline;
+            text-align: center;
+            font-size: 2.5rem;
+            padding-bottom: 40px;
+            font-weight: bold;
+        }
+
+        .resultScreen .turn {
+            font-size: 1.8rem;
+            padding-bottom: 30px;
+        }
+
+        .resultScreen .btn {
+            font-size: 2rem;
+            padding: 13px 30px;
+            border-radius: 15px;
+            cursor: pointer;
+            border: 3px solid black;
+        }
+
+        .resultScreen .btn:hover {
+            background-color: #84e296;
+        }
+
+        /* responsive */
+        @media only screen and (min-width: 701px) and (max-width: 1010px) {
+            .resultScreen h2 {
+                font-size: 1.7rem;
+            }
+
+            .gamegrid {
+                grid-template-columns: repeat(3, 13vw);
+                grid-template-rows: repeat(3, 13vw);
+            }
+
+        }
+
+        @media only screen and (max-width: 700px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .gameScreen {
+                width: 100vw;
+                height: 46vh;
+            }
+
+            .resultScreen {
+                width: 100vw;
+                height: 46vh;
+            }
+
+            .resultScreen h2 {
+                font-size: 1.7rem;
+                padding-bottom: 25px;
+            }
+
+            .resultScreen .turn {
+                padding-bottom: 25px;
+            }
+
+            .gamegrid {
+                grid-template-columns: repeat(3, 25vw);
+                grid-template-rows: repeat(3, 25vw);
+            }
+
+        }
+    </style>
+</head>
+
+<body>
+    <nav>MyTicTacToe.com</nav>
+    <div class="container">
+        <div class="gameScreen">
+            <div class="gamegrid">
+                <div class="grid-box br-r br-b"></div>
+                <div class="grid-box br-b br-l br-r"></div>
+                <div class="grid-box br-b br-l"></div>
+                <div class="grid-box br-b br-t br-r"></div>
+                <div class="grid-box br-b br-r br-t br-l"></div>
+                <div class="grid-box br-b br-t br-l"></div>
+                <div class="grid-box br-t br-r"></div>
+                <div class="grid-box br-t br-r br-l"></div>
+                <div class="grid-box br-t br-l"></div>
+            </div>
+        </div>
+        <div class="resultScreen">
+            <h2>Welcome To My Tic-Tac-Toe</h2>
+            <h3 class="turn">Turn of 'X'</h3>
+            <button class="btn" type="reset">Reset</button>
+        </div>
+    </div>
+    <script>
+        // game variables and constants
+        const box = document.getElementsByClassName("grid-box");
+        const turn_text = document.querySelector(".turn");
+        const reset = document.querySelector(".btn");
+        turn = 'X';
+        gameover = false;
+
+
+        // game functions here
+
+        function checkWin() {
+            win = [
+                [0, 1, 2],
+                [3, 4, 5],
+                [6, 7, 8],
+                [0, 3, 6],
+                [1, 4, 7],
+                [2, 5, 8],
+                [0, 4, 8],
+                [2, 4, 6]
+            ];
+            win.forEach(e => {
+                if (
+                    (Array.from(box)[e[0]].innerHTML === Array.from(box)[e[1]].innerHTML) &&
+                    (Array.from(box)[e[1]].innerHTML === Array.from(box)[e[2]].innerHTML) &&
+                    (Array.from(box)[e[0]].innerHTML !== '')
+                ) {
+                    gameover = true
+                };
+            });
+        };
+
+        function changeTurn() {
+            if (turn === 'X') {
+                turn = 'O';
+            }
+            else {
+                turn = 'X';
+            }
+        }
+
+        function checkDraw() {
+            let c = 0;
+            for (let i = 0; i < Array.from(box).length; i++) {
+                if (Array.from(box)[i].innerHTML != "") {
+                    c++;
+                }
+            }
+            return c;
+        }
+
+        // game play logic starts here
+
+        Array.from(box).forEach(e => {
+            e.addEventListener("click", () => {
+                if (e.innerHTML === '') {
+                    e.innerHTML = turn;
+                    checkWin();
+                    let count = checkDraw();
+                    if (count === 9 && !gameover) {
+                        turn_text.innerHTML = 'Match Draw!';
+                    }
+                    else {
+                        if (!gameover) {
+                            changeTurn();
+                            turn_text.innerHTML = `Turn of '${turn}'`;
+                        }
+                        else {
+                            if (turn === 'X') {
+                                turn_text.innerHTML = `'X' Won`;
+                            }
+                            else if (turn === 'O') {
+                                turn_text.innerHTML = `'O' Won`;
+                            }
+                            turn = ""
+                        }
+                    }
+                }
+            });
+        });
+
+        reset.addEventListener('click', () => {
+            turn = 'X';
+            gameover = false;
+            Array.from(box).forEach(e => {
+                e.innerHTML = ''
+                turn_text.innerHTML = `Turn of '${turn}'`;
+            });
+        });
+    </script>
+</body>
+
+</html>
